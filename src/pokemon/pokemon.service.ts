@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Model } from 'mongoose';
@@ -29,13 +33,18 @@ export class PokemonService {
     return pokemon;
   }
 
-  findAll() {
-    const pokemons = this.pokemonModel.find({});
+  async findAll() {
+    const pokemons = await this.pokemonModel.find({});
     return pokemons;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pokemon`;
+  async findOne(id: string) {
+    const pokemon = await this.pokemonModel.findById(id);
+
+    if (!pokemon)
+      throw new NotFoundException(`Pokemon with id ${id} not found`);
+
+    return pokemon;
   }
 
   update(id: number, updatePokemonDto: UpdatePokemonDto) {
