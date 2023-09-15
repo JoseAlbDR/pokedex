@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
@@ -18,19 +19,28 @@ export class PokemonService {
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLowerCase();
 
-    let pokemon = await this.pokemonModel.findOne({
-      no: createPokemonDto.no,
-    });
+    // let pokemon = await this.pokemonModel.findOne({
+    //   no: createPokemonDto.no,
+    // });
 
-    if (pokemon)
-      throw new ConflictException(
-        `Pokemon ${createPokemonDto.name} already exists`,
+    // if (pokemon)
+    //   throw new ConflictException(
+    //     `Pokemon ${createPokemonDto.name} already exists`,
+    //   );
+
+    try {
+      const pokemon = await this.pokemonModel.create(createPokemonDto);
+      return pokemon;
+    } catch (error) {
+      if (error.code === 11000)
+        throw new ConflictException(
+          `Pokemon ${createPokemonDto.name} already exists`,
+        );
+      console.log(error);
+      throw new InternalServerErrorException(
+        "Can't create Pokemon, check server logs.",
       );
-
-    pokemon = await this.pokemonModel.create(createPokemonDto);
-
-    console.log(pokemon);
-    return pokemon;
+    }
   }
 
   async findAll() {
