@@ -30,7 +30,8 @@ export class PokemonService {
   }
 
   findAll() {
-    return `This action returns all pokemon`;
+    const pokemons = this.pokemonModel.find({});
+    return pokemons;
   }
 
   findOne(id: number) {
