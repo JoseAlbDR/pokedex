@@ -25,7 +25,9 @@ export class PokemonService {
     } catch (error) {
       if (error.code === 11000)
         throw new ConflictException(
-          `Pokemon ${createPokemonDto.name} already exists`,
+          `Pokemon with ${Object.keys(error.keyPattern)}: ${Object.values(
+            error.keyValue,
+          )} already exists`,
         );
       console.log(error);
       throw new InternalServerErrorException(
