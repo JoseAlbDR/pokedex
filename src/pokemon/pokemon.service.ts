@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
-import { Model } from 'mongoose';
+import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -41,11 +41,24 @@ export class PokemonService {
     return pokemons;
   }
 
-  async findOne(id: string) {
-    const pokemon = await this.pokemonModel.findById(id);
+  async findOne(param: string) {
+    let pokemon: Pokemon;
+
+    // Search by no
+    if (!isNaN(+param))
+      pokemon = await this.pokemonModel.findOne({ no: param });
+
+    // Search by MongoId
+    if (isValidObjectId(param))
+      pokemon = await this.pokemonModel.findById(param);
+
+    // Search by name
+    if (!pokemon) pokemon = await this.pokemonModel.findOne({ name: param });
 
     if (!pokemon)
-      throw new NotFoundException(`Pokemon with id ${id} not found`);
+      throw new NotFoundException(
+        `Pokemon with id, no or name ${id} not found`,
+      );
 
     return pokemon;
   }
