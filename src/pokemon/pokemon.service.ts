@@ -49,7 +49,7 @@ export class PokemonService {
       pokemon = await this.pokemonModel.findOne({ no: param });
 
     // Search by MongoId
-    if (isValidObjectId(param))
+    if (!pokemon && isValidObjectId(param))
       pokemon = await this.pokemonModel.findById(param);
 
     // Search by name
@@ -57,14 +57,45 @@ export class PokemonService {
 
     if (!pokemon)
       throw new NotFoundException(
-        `Pokemon with id, no or name ${id} not found`,
+        `Pokemon with id, no or name ${param} not found`,
       );
 
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  async update(param: string, updatePokemonDto: UpdatePokemonDto) {
+    let pokemon = await this.findOne(param);
+
+    if (!pokemon)
+      throw new NotFoundException(
+        `Pokemon with id, no or name ${param} not found`,
+      );
+
+    if (updatePokemonDto.name)
+      updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
+
+    try {
+      pokemon = await this.pokemonModel.findByIdAndUpdate(
+        pokemon.id,
+        updatePokemonDto,
+        {
+          new: true,
+        },
+      );
+
+      return pokemon;
+    } catch (error) {
+      if (error.code === 11000)
+        throw new ConflictException(
+          `Pokemon with ${Object.keys(error.keyPattern)}: ${Object.values(
+            error.keyValue,
+          )} already exists`,
+        );
+      console.log(error);
+      throw new InternalServerErrorException(
+        "Can't create Pokemon, check server logs.",
+      );
+    }
   }
 
   remove(id: number) {
