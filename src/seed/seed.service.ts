@@ -11,6 +11,11 @@ export class SeedService {
       'https://pokeapi.co/api/v2/pokemon?limit=1281',
     );
 
-    return data.results;
+    const pokemons = data.results.map(({ name, url }) => {
+      const no = url.split('/').at(-2);
+      return { name, no };
+    });
+
+    return pokemons;
   }
 }
