@@ -38,7 +38,7 @@ export class SeedService {
       },
     );
 
-    this.pokemonModel.create(pokemonToInsert);
+    await this.pokemonModel.insertMany(pokemonToInsert);
 
     return `Database populated`;
   }
