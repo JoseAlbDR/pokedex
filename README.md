@@ -24,6 +24,14 @@
   docker-componse up -d
 ```
 
+5. Recounstruir la base de datos con la semilla
+
+- Seed primero borra todos los datos de la base de datos y despues hace la repoblación
+
+```
+  http://localhost:3000/api/v1/seed
+```
+
 ## Stack usado
 
 - MongoDB
