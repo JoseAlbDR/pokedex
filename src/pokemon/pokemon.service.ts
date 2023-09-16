@@ -23,16 +23,7 @@ export class PokemonService {
       const pokemon = await this.pokemonModel.create(createPokemonDto);
       return pokemon;
     } catch (error) {
-      if (error.code === 11000)
-        throw new ConflictException(
-          `Pokemon with ${Object.keys(error.keyPattern)}: ${Object.values(
-            error.keyValue,
-          )} already exists`,
-        );
-      console.log(error);
-      throw new InternalServerErrorException(
-        "Can't create Pokemon, check server logs.",
-      );
+      this.handleExceptions(error);
     }
   }
 
@@ -85,20 +76,24 @@ export class PokemonService {
 
       return pokemon;
     } catch (error) {
-      if (error.code === 11000)
-        throw new ConflictException(
-          `Pokemon with ${Object.keys(error.keyPattern)}: ${Object.values(
-            error.keyValue,
-          )} already exists`,
-        );
-      console.log(error);
-      throw new InternalServerErrorException(
-        "Can't create Pokemon, check server logs.",
-      );
+      this.handleExceptions(error);
     }
   }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
+  }
+
+  private handleExceptions(error: any) {
+    if (error.code === 11000)
+      throw new ConflictException(
+        `Pokemon with ${Object.keys(error.keyPattern)}: ${Object.values(
+          error.keyValue,
+        )} already exists`,
+      );
+    console.log(error);
+    throw new InternalServerErrorException(
+      "Can't create Pokemon, check server logs.",
+    );
   }
 }
