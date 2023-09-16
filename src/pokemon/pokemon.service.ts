@@ -17,8 +17,8 @@ export class PokemonService {
     private readonly pokemonModel: Model<Pokemon>,
   ) {}
   async create(createPokemonDto: CreatePokemonDto) {
+    console.log('create pokemon');
     createPokemonDto.name = createPokemonDto.name.toLowerCase();
-
     try {
       const pokemon = await this.pokemonModel.create(createPokemonDto);
       return pokemon;
@@ -28,7 +28,7 @@ export class PokemonService {
   }
 
   async findAll() {
-    const pokemons = await this.pokemonModel.find({});
+    const pokemons = await this.pokemonModel.find({}).sort('no');
     return pokemons;
   }
 
