@@ -17,7 +17,7 @@ export class SeedService {
     await this.pokemonModel.deleteMany({});
 
     const { data } = await this.axios.get<PokeResponse>(
-      'https://pokeapi.co/api/v2/pokemon?limit=10',
+      'https://pokeapi.co/api/v2/pokemon?limit=1500',
     );
 
     // const insertPromisesArray: Promise<any>[] = [];
@@ -40,6 +40,6 @@ export class SeedService {
 
     await this.pokemonModel.insertMany(pokemonToInsert);
 
-    return `Database populated`;
+    return `${pokemonToInsert.length} pokemons inserted successfully`;
   }
 }
