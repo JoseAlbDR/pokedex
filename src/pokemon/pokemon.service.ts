@@ -87,10 +87,7 @@ export class PokemonService {
 
     // const result = await this.pokemonModel.findByIdAndDelete(id);
 
-    const result = await this.pokemonModel.deleteOne(
-      { _id: id },
-      { runValidators: true },
-    );
+    const result = await this.pokemonModel.deleteOne({ _id: id });
 
     if (result.deletedCount < 1)
       throw new NotFoundException(`Pokemon with id ${id} not found`);
