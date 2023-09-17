@@ -4,4 +4,3 @@ export const EnvConfiguration = () => ({
   port: process.env.PORT || 3000,
   defaultLimit: process.env.DEFAULT_LIMIT,
 });
-S;
