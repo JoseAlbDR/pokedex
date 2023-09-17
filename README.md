@@ -24,7 +24,23 @@
   docker-componse up -d
 ```
 
-5. Recounstruir la base de datos con la semilla
+5. Clonar el archivo `.env.template` y renombrar la copia a `.env`
+
+6. Rellenar las variables de entorno definidas en el `.env` con datos propios
+
+7. Ejecutar la aplicación en dev:
+
+```
+  yarn start:dev
+```
+
+o
+
+```
+  npm run dev
+```
+
+9. Recounstruir la base de datos con la semilla
 
 - Seed primero borra todos los datos de la base de datos y despues hace la repoblación
 
