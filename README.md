@@ -48,6 +48,8 @@ o
   http://localhost:3000/api/v1/seed
 ```
 
+Deplyed in Railway
+
 ## Stack usado
 
 - MongoDB
